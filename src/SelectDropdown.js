@@ -11,6 +11,7 @@ import {useSelectDropdown} from './hooks/useSelectDropdown';
 import {useLayoutDropdown} from './hooks/useLayoutDropdown';
 import {useRefs} from './hooks/useRefs';
 import {findIndexInArr} from './helpers/findIndexInArr';
+import {Dimensions} from "react-native";
 
 const SelectDropdown = (
   {
@@ -94,11 +95,32 @@ const SelectDropdown = (
   }));
   /* ******************* Methods ******************* */
   const openDropdown = () => {
-    dropdownButtonRef.current.measure((fx, fy, w, h, px, py) => {
-      onDropdownButtonLayout(w, h, px, py);
-      setIsVisible(true);
-      onFocus && onFocus();
-    });
+      dropdownButtonRef.current.measure((fx, fy, w, h, px, py) => {
+          // Calculate dropdown position
+          const dropdownWidth = 150;
+          const dropdownHeight = 0;
+
+          const screenWidth = Dimensions.get('window').width;
+          const screenHeight = Dimensions.get('window').height;
+
+          let dropdownX = px; // X position of the dropdown
+          let dropdownY = py + h; // Y position of the dropdown, below the button by default
+
+          // Check if dropdown exceeds screen boundaries horizontally
+          if (dropdownX + dropdownWidth > screenWidth) {
+              dropdownX = screenWidth - dropdownWidth;
+          }
+
+          // Check if dropdown exceeds screen boundaries vertically
+          if (dropdownY + dropdownHeight > screenHeight) {
+              dropdownY = py - dropdownHeight; // Position above the button
+          }
+
+          // Set dropdown position
+          onDropdownButtonLayout(w, h, dropdownX, dropdownY);
+          setIsVisible(true);
+          onFocus && onFocus();
+      });
   };
   const closeDropdown = () => {
     setIsVisible(false);
