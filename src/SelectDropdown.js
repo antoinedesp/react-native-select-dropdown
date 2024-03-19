@@ -94,17 +94,17 @@ const SelectDropdown = (
     },
   }));
   /* ******************* Methods ******************* */
-  const openDropdown = () => {
+ const openDropdown = () => {
       dropdownButtonRef.current.measure((fx, fy, w, h, px, py) => {
           // Calculate dropdown position
-          const dropdownWidth = 150;
-          const dropdownHeight = 0;
+          const dropdownWidth = 175;
+          const dropdownHeight = h;
 
           const screenWidth = Dimensions.get('window').width;
           const screenHeight = Dimensions.get('window').height;
 
           let dropdownX = px; // X position of the dropdown
-          let dropdownY = py + h; // Y position of the dropdown, below the button by default
+          let dropdownY = py; // Y position of the dropdown, below the button by default
 
           // Check if dropdown exceeds screen boundaries horizontally
           if (dropdownX + dropdownWidth > screenWidth) {
